@@ -11,7 +11,6 @@ def edit_html(htmlpath):
 	f = open(htmlpath, "r",  encoding="utf8")
 	contents = f.readlines()
 	f.close()
-	print("HELLO READING HTML", htmlpath)
 	contents.insert(10, '<link rel="stylesheet" type="text/css" href="/assets/style.css">')
 	contents.insert(11, '<script async type="text/javascript" src="/assets/webgazer.js"></script>')
 	contents.insert(20,'''<canvas id="plotting_canvas" width="500" height="500" style="cursor:crosshair;"></canvas>
