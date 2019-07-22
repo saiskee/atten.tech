@@ -1,11 +1,5 @@
 # Atten.tech
 
-## Atten.tech Pictures
-![Atten.tech Screenshot](https://challengepost-s3-challengepost.netdna-ssl.com/photos/production/software_photos/000/792/973/datas/gallery.jpg)
-The landing page for the Atten.tech site
-![Atten.tech Screenshot](https://challengepost-s3-challengepost.netdna-ssl.com/photos/production/software_photos/000/792/974/datas/gallery.jpg "Test")
-The Atten.tech interface, displaying pupil tracking and div-heatmap creation, all in-browser
-
 ## What is Atten.tech?
 Atten.Tech is an eye - tracking and reading behavior analysis platform that uses data gathered from your behavior during studying, memorizing, preparing etc. in order to help you out by suggesting parts of the text you should revise.
 
@@ -26,3 +20,8 @@ Whether it be to just check your knowledge, understand your classroom better or 
 1. Install Python / Flask
 2. Run `python server.py` from the command line
 3. Navigate to localhost:5000 to use the product and start a development instance
+
+## Atten.tech Pictures
+![Atten.tech Screenshot](https://challengepost-s3-challengepost.netdna-ssl.com/photos/production/software_photos/000/792/973/datas/gallery.jpg)
+![Atten.tech Screenshot](https://challengepost-s3-challengepost.netdna-ssl.com/photos/production/software_photos/000/792/974/datas/gallery.jpg "Test")
+The landing page for the Atten.tech site & The Atten.tech interface, displaying pupil tracking and div-heatmap creation, all in-browser
