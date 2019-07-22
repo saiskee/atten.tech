@@ -1,0 +1,140 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml"><head><meta charset="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/><link rel="stylesheet" href="base.min.css"/><link rel="stylesheet" href="fancy.min.css"/><link rel="stylesheet" href="main.css"/><script src="compatibility.min.js"></script><script src="theViewer.min.js"></script><script>try{theViewer.defaultViewer = new theViewer.Viewer({});}catch(e){}</script><title></title></head><body><script async type="text/javascript" src="/assets/webgazer.js"></script>
+<link rel="stylesheet" type="text/css" href="/assets/style.css">
+<canvas id="plotting_canvas" width="500" height="500"></canvas>
+<script src="/assets/jquery.min.js"></script>
+<script src="/assets/sweetalert.min.js"></script>
+
+<script src="/assets/main.js"></script>
+<script src="/assets/calibration.js"></script>
+<script src="/assets/precision_calculation.js"></script>
+<script src="/assets/precision_store_points.js"></script>
+
+<!-- Calibration points -->
+<div class="calibrationDiv">
+  <input type="button" class="Calibration" id="Pt5"></input>
+</div>
+
+<meta charset="UTF-8">
+<link rel="shortcut icon" type="image/x-icon"
+  href="https://static.codepen.io/assets/favicon/favicon-8ea04875e70c4b0bb41da869e81236e54394d63638a1ef12fa558a4a835f1164.ico" />
+<link rel="mask-icon" type=""
+  href="https://static.codepen.io/assets/favicon/logo-pin-f2d2b6d2c61838f7e76325261b7195c27224080bc099486ddd6dccb469b8e8e6.svg"
+  color="#111" />
+<title>Atten.tech Reader</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+<style>
+
+  button {
+    background: none;
+    border: none;
+    position: relative;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 3px;
+    cursor: pointer;
+    transition: opacity 0.5s;
+  }
+
+  button:after,
+  button:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    border: 2px solid #000;
+    transition: transform 0.2s, -webkit-transform 0.2s;
+  }
+
+  button:after {
+    -webkit-transform: translate(3px, 3px);
+    transform: translate(3px, 3px);
+  }
+
+  button:before {
+    -webkit-transform: translate(-3px, -3px);
+    transform: translate(-3px, -3px);
+  }
+
+  button:hover:after,
+  button:hover:before {
+    -webkit-transform: translate(0);
+    transform: translate(0);
+  }
+
+  div#controlHeader{
+    position: fixed;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items:center;
+    top: 0;
+    opacity:0.9;
+    border-radius:10px;
+    right: 0;
+    width: 15vw;
+    height: 100vh;
+    border: 2px solid black;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 90;
+    transition: opacity 0.5s;
+    background-image: url("https://www.marcoguglie.it/Codepen/AnimatedHeaderBg/demo-1/img/demo-1-bg.jpg");
+  }
+  div#controlHeader:hover{
+    opacity:1;
+    border-radius: 3px;
+  }
+  .main-title {
+      color: #f9f1e9;
+    }
+
+    .sub-title {
+      color: #f9f1e9;
+    }
+
+    .main-title {
+      font-family: 'Raleway';
+      font-weight: bold;
+      text-align:right;
+      padding-right: 10%;
+    }
+
+    .main-title .thin {
+      font-weight: 200;
+    }
+</style>
+<script>
+  window.console = window.console || function (t) { };
+</script>
+<script>
+  if (document.location.search.match(/type=embed/gi)) {
+    window.parent.postMessage("resize", "*");
+  }
+</script>
+</head>
+
+<body translate="no">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:200,400,800" rel="stylesheet" type="text/css">
+    <link rel='stylesheet' href='//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css'>
+    <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet'>
+  <script
+    src="https://static.codepen.io/assets/editor/live/css_reload-5619dc0905a68b2e6298901de54f73cefe4e079f65a75406858d92924b4938bf.js"></script>
+  <div id="controlHeader">
+  <h1 class="main-title" ">
+      <font size="15" >Atten</font><span class="thin" onclick="toggleWebgazer()"> 
+        <font size="6" >.tech</font>
+      </span>
+  </h1>
+  <button type="button" id="restart" class="btn btn-primary" onclick="Restart()"
+    style="z-index:100;">Calibrate</button>
+  <button type="button" id="startReading" class="btn btn-primary" onclick="StartDataRecording()"
+    style="z-index:100; background-color: rgba(34,139,34,0.6);">Start
+    Reading</button>
+  <button type="button" id="stopReading"class="btn btn-primary" onclick="StopDataRecording()"
+    style="z-index:99; background-color: rgba(255,99,71,0.6); opacity: 0; pointer-events: none">Stop
+    Reading</button>
+  </div>
+  <!-- Latest compiled JavaScript -->
+  <script src="/assets/resize_canvas.js"></script>
+  <!-- <script>setTimeout(function () { webgazer.pause() }, 3000)</script> --><div id="sidebar"><div id="outline"></div></div><div id="page-container"><div id="pf1" class="pf w0 h0" data-page-no="1"><div class="pc pc1 w0 h0"><img class="bi x0 y0 w1 h1" alt="" src="bg1.png"/><div class="c x1 y1 w2 h0"><div class="t m0 x2 h2 y2 ff1 fs0 fc0 sc0 ls0 ws0"> </div><div class="t m0 x2 h2 y3 ff1 fs0 fc0 sc0 ls0 ws0"> </div><div class="t m0 x2 h2 y4 ff1 fs0 fc0 sc0 ls0 ws0"> </div><div class="t m1 x0 h3 y5 ff1 fs1 fc1 sc0 ls0 ws0">EDUCATION</div><div class="t m0 x3 h3 y5 ff1 fs1 fc1 sc0 ls0 ws0"> </div><div class="t m0 x4 h4 y6 ff1 fs2 fc0 sc0 ls0 ws0">MANAN <span class="fc2">PATEL </span></div><div class="t m0 x5 h5 y7 ff2 fs1 fc0 sc0 ls0 ws0">󰵰<span class="ff1"> <span class="ff3">mjpatel@umas<span class="_ _0"></span>s.edu<span class="ff4"> </span>|<span class="_ _0"></span><span class="ff4"> <span class="ff5 sc1">✆</span> <span class="ff3">(<span class="ls1">626</span>)-<span class="ls1">747</span>-<span class="ls1">2364</span> </span></span></span></span></div><div class="t m0 x4 h3 y8 ff3 fs1 fc3 sc0 ls0 ws0">linkedin.com/in/<span class="_ _0"></span>mananpatel97</div><div class="t m0 x6 h6 y9 ff1 fs3 fc0 sc0 ls0 ws0"> </div><div class="t m2 x0 h7 ya ff6 fs4 fc0 sc0 ls0 ws0">Univ<span class="_ _1"></span>ersit<span class="_ _1"></span>y of<span class="_ _1"></span> <span class="_ _2"></span>Mass<span class="_ _1"></span>ach<span class="_ _1"></span>usett<span class="_ _1"></span>s, <span class="_ _3"></span>Amhe<span class="_ _1"></span>rst</div><div class="t m3 x5 h8 ya ff1 fs4 fc0 sc0 ls0 ws0"> </div><div class="t m0 x7 h9 ya ff1 fs5 fc0 sc0 ls0 ws0">Sept. 2016 <span class="ff7">–</span> <span class="_ _4"></span>May20<span class="ls2">20</span> </div><div class="t m4 x0 h8 yb ff1 fs4 fc0 sc0 ls0 ws0">Can<span class="_ _1"></span>dida<span class="_ _1"></span>te<span class="_ _1"></span> <span class="_ _4"></span>for<span class="_ _1"></span> </div><div class="t m5 x8 h7 yb ff6 fs4 fc0 sc0 ls0 ws0">Bac<span class="_ _1"></span>h<span class="_ _1"></span>elor<span class="_ _1"></span> <span class="_ _4"></span><span class="ls3">of<span class="ls0"> <span class="_ _5"></span>Co<span class="_ _1"></span>mp<span class="_ _1"></span>ute<span class="_ _1"></span>r <span class="_ _5"></span>Sci<span class="_ _1"></span>enc<span class="_ _1"></span>e <span class="_ _4"></span>a<span class="_ _1"></span>nd<span class="_ _1"></span> <span class="_ _4"></span>M<span class="_ _1"></span>ath<span class="_ _1"></span>ema<span class="_ _1"></span>ti<span class="_ _1"></span>cs </span></span></div><div class="t m6 x9 ha yb ff6 fs5 fc0 sc0 ls0 ws0">(Ma<span class="_ _1"></span>jor<span class="_ _1"></span> <span class="ls4">GPA</span> <span class="_ _4"></span>3<span class="_ _1"></span>.65/4.0<span class="_ _1"></span>0)<span class="_ _1"></span> </div><div class="t m7 xa h9 yb ff1 fs5 fc0 sc0 ls0 ws0">(expe<span class="_ _1"></span>cted)</div><div class="t m0 xb h9 yb ff1 fs5 fc0 sc0 ls0 ws0"> </div><div class="t m0 xc h8 yc ff7 fs4 fc0 sc0 ls0 ws0">•<span class="ff3"> </span></div><div class="t m8 xd h8 yc ff1 fs4 fc0 sc0 ls0 ws0">A</div><div class="t m9 xe h8 yc ff1 fs4 fc0 sc0 ls0 ws0">w</div><div class="t ma xf h8 yc ff1 fs4 fc0 sc0 ls0 ws0">a</div><div class="t m0 x10 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">r</div><div class="t m4 x11 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">d</div><div class="t m3 x12 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">e</div><div class="t m4 x3 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">d</div><div class="t m0 x13 h8 yc ff1 fs4 fc0 sc0 ls0 ws0"> </div><div class="t mb x14 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">t</div><div class="t m4 x15 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">h</div><div class="t m3 x16 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">e</div><div class="t m0 x17 h8 yc ff1 fs4 fc0 sc0 ls0 ws0"> </div><div class="t m8 x18 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">C</div><div class="t m4 x19 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">h</div><div class="t ma x1a h8 yc ff1 fs4 fc0 sc0 ls0 ws0">a</div><div class="t m4 x1b h8 yc ff1 fs4 fc0 sc0 ls0 ws0">n</div><div class="t mc x1c h8 yc ff1 fs4 fc0 sc0 ls0 ws0">c</div><div class="t m3 x1d h8 yc ff1 fs4 fc0 sc0 ls0 ws0">e</div><div class="t m8 x1e h8 yc ff1 fs4 fc0 sc0 ls0 ws0">l<span class="_ _1"></span>l</div><div class="t m4 x1f h8 yc ff1 fs4 fc0 sc0 ls0 ws0">o</div><div class="t m0 x20 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">r</div><div class="t m9 x21 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">s</div><div class="t m0 x22 h8 yc ff1 fs4 fc0 sc0 ls0 ws0"> </div><div class="t md x23 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">S</div><div class="t mc x24 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">c</div><div class="t m4 x25 h8 yc ff1 fs4 fc0 sc0 ls5 ws0">ho</div><div class="t m8 x26 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">l</div><div class="t ma x27 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">a</div><div class="t m0 x28 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">r</div><div class="t m9 x29 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">s</div><div class="t m4 x2a h8 yc ff1 fs4 fc0 sc0 ls0 ws0">h</div><div class="t m8 x2b h8 yc ff1 fs4 fc0 sc0 ls0 ws0">i</div><div class="t m4 x2c h8 yc ff1 fs4 fc0 sc0 ls0 ws0">p</div><div class="t m0 x5 h8 yc ff1 fs4 fc0 sc0 ls0 ws0"> </div><div class="t me x2d h8 yc ff1 fs4 fc0 sc0 ls0 ws0">f</div><div class="t m4 x2e h8 yc ff1 fs4 fc0 sc0 ls0 ws0">o</div><div class="t m0 x2f h8 yc ff1 fs4 fc0 sc0 ls0 ws0">r </div><div class="t m8 x30 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">A</div><div class="t mf x31 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">Y</div><div class="t m0 x32 h8 yc ff1 fs4 fc0 sc0 ls2 ws0">201<span class="ls0">6</span></div><div class="t m10 x33 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">/</div><div class="t m0 x34 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">20 </div><div class="t me x35 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">f</div><div class="t m4 x36 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">o</div><div class="t m0 x37 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">r </div><div class="t m4 x38 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">ou</div><div class="t mb x39 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">t</div><div class="t m9 x9 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">s</div><div class="t mb x3a h8 yc ff1 fs4 fc0 sc0 ls0 ws0">t</div><div class="t ma x3b h8 yc ff1 fs4 fc0 sc0 ls0 ws0">a</div><div class="t m4 x3c h8 yc ff1 fs4 fc0 sc0 ls0 ws0">nd</div><div class="t m8 x3d h8 yc ff1 fs4 fc0 sc0 ls0 ws0">i</div><div class="t m4 x3e h8 yc ff1 fs4 fc0 sc0 ls0 ws0">n</div><div class="t me x3f h8 yc ff1 fs4 fc0 sc0 ls0 ws0">g</div><div class="t m0 x40 h8 yc ff1 fs4 fc0 sc0 ls0 ws0"> </div><div class="t ma x41 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">a</div><div class="t mc x42 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">c</div><div class="t ma x43 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">a</div><div class="t m4 x44 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">d</div><div class="t m3 x45 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">e</div><div class="t m0 x46 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">m</div><div class="t m8 x47 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">i</div><div class="t mc x48 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">c</div><div class="t m9 x49 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">,</div><div class="t m0 x4a h8 yc ff1 fs4 fc0 sc0 ls0 ws0"> </div><div class="t mc x4b h8 yc ff1 fs4 fc0 sc0 ls0 ws0">c</div><div class="t m4 x4c h8 yc ff1 fs4 fc0 sc0 ls0 ws0">o</div><div class="t me x4d h8 yc ff1 fs4 fc0 sc0 ls0 ws0">-</div><div class="t mc x4e h8 yc ff1 fs4 fc0 sc0 ls0 ws0">c</div><div class="t m4 x4f h8 yc ff1 fs4 fc0 sc0 ls0 ws0">u</div><div class="t m0 x50 h8 yc ff1 fs4 fc0 sc0 ls6 ws0">rr</div><div class="t m8 x51 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">i</div><div class="t mc x52 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">c</div><div class="t m4 x53 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">u</div><div class="t m8 x54 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">l</div><div class="t ma x55 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">a</div><div class="t m0 x56 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">r </div><div class="t ma x57 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">a</div><div class="t m4 x58 h8 yc ff1 fs4 fc0 sc0 ls5 ws0">nd</div><div class="t m0 x59 h8 yc ff1 fs4 fc0 sc0 ls0 ws0"> </div><div class="t mc x5a h8 yc ff1 fs4 fc0 sc0 ls0 ws0">c</div><div class="t m4 x5b h8 yc ff1 fs4 fc0 sc0 ls0 ws0">o</div><div class="t m0 x5c h8 yc ff1 fs4 fc0 sc0 ls0 ws0">mm</div><div class="t m4 x5d h8 yc ff1 fs4 fc0 sc0 ls0 ws0">un</div><div class="t m8 x5e h8 yc ff1 fs4 fc0 sc0 ls0 ws0">i</div><div class="t mb x5f h8 yc ff1 fs4 fc0 sc0 ls0 ws0">t</div><div class="t m11 x7 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">y</div><div class="t m0 x60 h8 yc ff1 fs4 fc0 sc0 ls0 ws0"> </div><div class="t m9 x61 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">s</div><div class="t m3 x62 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">e</div><div class="t m0 x63 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">r</div><div class="t m11 x64 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">v</div><div class="t m8 x65 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">i</div><div class="t mc x66 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">c</div><div class="t m3 x67 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">e</div><div class="t m0 x68 h8 yc ff1 fs4 fc0 sc0 ls0 ws0"> <span class="_ _0"></span>r</div><div class="t m3 xa h8 yc ff1 fs4 fc0 sc0 ls0 ws0">e</div><div class="t mc x69 h8 yc ff1 fs4 fc0 sc0 ls0 ws0">c</div><div class="t m4 x6a h8 yc ff1 fs4 fc0 sc0 ls0 ws0">o</div><div class="t m0 x6b h8 yc ff1 fs4 fc0 sc0 ls0 ws0">r</div><div class="t m4 x6c h8 yc ff1 fs4 fc0 sc0 ls0 ws0">d</div><div class="t m0 x6d h8 yc ff1 fs4 fc0 sc0 ls0 ws0"> </div><div class="t m0 xc h8 yd ff7 fs4 fc0 sc0 ls0 ws0">•<span class="ff3"> <span class="_ _6"> </span><span class="ff1">Awarded </span></span>Dean’s<span class="ff1"> <span class="_ _0"></span>List <span class="_ _0"></span>Fall 2018 for <span class="_ _0"></span>exceptional <span class="_ _0"></span>academic achiev<span class="_ _0"></span>ement<span class="_ _1"></span> </span></div><div class="t m0 x0 h7 ye ff6 fs4 fc0 sc0 ls0 ws0">Microsoft P<span class="_ _1"></span>rofessional Program Certificate fo<span class="_ _1"></span>r Data Science      <span class="_ _1"></span>                       <span class="_ _3"></span> <span class="_ _7"> </span> <span class="_ _8"> </span> <span class="_ _8"> </span> <span class="_ _8"> </span> <span class="ff1 fs5">Jan. 2019 <span class="ff7">–</span> Dec. 2019<span class="fs4"> </span></span></div><div class="t m0 x2 h7 yf ff6 fs4 fc0 sc0 ls0 ws0"> <span class="_ _9"> </span> <span class="_ _a"> </span> <span class="_ _8"> </span> <span class="_ _8"> </span> <span class="_ _8"> </span> <span class="_ _8"> </span> <span class="_ _8"> </span> <span class="_ _8"> </span> <span class="_ _8"> </span> <span class="_ _8"> </span> <span class="_ _8"> </span> <span class="_ _8"> </span> <span class="_ _8"> </span> <span class="_ _8"> </span> <span class="_ _8"> </span><span class="ls7">   </span></div><div class="t m7 x6e h9 yf ff1 fs5 fc0 sc0 ls0 ws0">(expec<span class="_ _1"></span>ted)</div><div class="t m0 x6f h8 yf ff1 fs4 fc0 sc0 ls0 ws0"> </div><div class="t m0 x0 h3 y10 ff1 fs1 fc1 sc0 ls0 ws0">SKILLS </div><div class="t m0 x70 h6 y11 ff1 fs3 fc0 sc0 ls0 ws0"> </div><div class="t m0 x2 h7 y12 ff6 fs4 fc0 sc0 ls7 ws0">  <span class="ls0">Programming Languages<span class="_ _1"></span><span class="ff1"> <span class="ff7">–</span>Python (N<span class="_ _1"></span>umPy)<span class="ls7">, </span>JavaScript (<span class="_ _1"></span><span class="ls8">D3</span>), <span class="_ _1"></span>MySQL, Excel, Po<span class="_ _1"></span>wer BI, MATL<span class="_ _1"></span>AB, Java, HT<span class="_ _1"></span>ML, CSS, Git<span class="ls7">, C</span>, LaTeX<span class="_ _1"></span></span> </span></div><div class="t m0 x0 h7 y13 ff6 fs4 fc0 sc0 ls0 ws0">Relevant Courses<span class="ff1"> <span class="_ _1"></span><span class="ff7">–</span> Data Visualizatio<span class="_ _1"></span>n, Prob<span class="_ _1"></span>ability theory, Data Analysis and Statistic<span class="_ _1"></span>s, <span class="_ _1"></span>Reasoning under<span class="_ _1"></span> Uncertainty, Linear Algebra,<span class="_ _1"></span> </span></div><div class="t m0 x0 h8 y14 ff1 fs4 fc0 sc0 ls0 ws0">Data Structures and Algor<span class="_ _1"></span>ithms, Intro to Algorithms, Intro<span class="_ _3"></span> <span class="ls9">to</span> <span class="_ _0"></span>Scientific <span class="_ _0"></span>Computing, <span class="_ _0"></span>A<span class="_ _b"></span>p<span class="_ _b"></span>pl<span class="_ _b"></span>i<span class="_ _0"></span>c<span class="_ _b"></span>at<span class="_ _b"></span>i<span class="_ _b"></span>on<span class="_ _b"></span>s<span class="_ _b"></span> <span class="_ _0"></span>o<span class="_ _b"></span>f<span class="_ _b"></span>  <span class="_ _b"></span>Scientific <span class="_ _b"></span>Co<span class="_ _1"></span>mputing (M<span class="_ _1"></span>ATLAB)<span class="ls7">, </span></div><div class="t m0 x0 h8 y15 ff1 fs4 fc0 sc0 ls0 ws0">Multivariable Calcul<span class="_ _1"></span>us, Computer S<span class="_ _1"></span>ystems Principles, <span class="_ _1"></span>Progra<span class="_ _1"></span>mming Methodologies,<span class="_ _1"></span> Comp<span class="_ _1"></span>utational <span class="_ _b"></span>Mat<span class="_ _1"></span>hematics, Intro <span class="_ _b"></span><span class="ls9">to<span class="ls0"> <span class="_ _b"></span>Data <span class="_ _b"></span>Science </span></span></div><div class="t m0 x0 h8 y16 ff1 fs4 fc0 sc0 ls0 ws0">(Online), <span class="_ _b"></span>Analyzing and Vi<span class="_ _1"></span>sualizing Data with Po<span class="_ _1"></span>wer BI <span class="_ _1"></span>(online), <span class="_ _b"></span>Analytics Stor<span class="_ _1"></span>ytelling for Impact <span class="_ _1"></span>(online)<span class="_ _1"></span> </div><div class="t m1 x0 h3 y17 ff1 fs1 fc1 sc0 ls0 ws0">WORK <span class="_ _2"></span>EXPERIENCE</div><div class="t m0 x1b h3 y17 ff1 fs1 fc1 sc0 ls0 ws0"> <span class="_ _c"> </span> </div><div class="t m0 x0 h7 y18 ff6 fs4 fc0 sc0 ls0 ws0"> </div><div class="t m0 x0 h7 y19 ff6 fs4 fc0 sc0 ls0 ws0">NationsRoot Inc<span class="_ _1"></span> <span class="_ _d"> </span> </div><div class="t m0 x2 h8 y1a ff1 fs4 fc0 sc0 ls7 ws0">     <span class="ls0">Digital Marketing Intern<span class="_ _1"></span> <span class="_ _e"> </span> <span class="_ _f"> </span></span>        <span class="ls0">May 2018 <span class="ff7">–</span> August <span class="ls2">2018</span> </span></div><div class="t m0 xc h8 y1b ff7 fs4 fc0 sc0 ls0 ws0">•<span class="ff3"> <span class="_ _6"> </span><span class="ff1">Worked on implementing a<span class="_ _1"></span>nd improved user experience UI<span class="_ _1"></span> and gave an idea on i<span class="_ _1"></span>mproving <span class="_ _1"></span>SEO<span class="_ _1"></span> </span></span></div><div class="t m0 xc h8 y1c ff7 fs4 fc0 sc0 ls0 ws0">•<span class="ff3"> <span class="_ _6"> </span><span class="ff1 fc4">Redesigned the existi<span class="_ _1"></span>ng website design, <span class="_ _1"></span><span class="fc0">Improved the searc<span class="_ _1"></span>h user experience <span class="_ _1"></span>with zip code<span class="_ _1"></span> </span></span></span></div><div class="t m0 xc h8 y1d ff7 fs4 fc0 sc0 ls0 ws0">•<span class="ff3"> <span class="_ _6"> </span><span class="ff1">Worked on deb<span class="_ _1"></span>ugging fixing html/CSS changes <span class="_ _1"></span>for the website and also <span class="_ _3"></span>worked on i<span class="_ _1"></span>nteroperability verbs issue<span class="_ _1"></span>s<span class="_ _1"></span> </span></span></div><div class="t m0 xc h8 y1e ff7 fs4 fc0 sc0 ls0 ws0">•<span class="ff3"> <span class="_ _6"> </span><span class="ff1">Created a content shari<span class="_ _1"></span>ng schedule on T<span class="_ _1"></span>witter, Facebook <span class="_ _1"></span><span class="fc4">and <span class="_ _1"></span>made YouTube videos <span class="_ _1"></span></span>that resulted i<span class="_ _1"></span>n a 10% growth in follo<span class="_ _1"></span>wer </span></span></div><div class="t m0 xd h8 y1f ff1 fs4 fc0 sc0 ls0 ws0">count </div><div class="t m0 xc h8 y20 ff7 fs4 fc0 sc0 ls0 ws0">•<span class="ff3"> <span class="_ _6"> </span><span class="ff1">Created YouTube <span class="_ _1"></span>videos and written a script and co<span class="_ _1"></span>ntent of the website<span class="_ _3"></span> </span></span></div><div class="t m0 x0 h3 y21 ff1 fs1 fc1 sc0 ls0 ws0">PROJECTS <span class="_ _10"> </span> </div><div class="t m0 x2 h7 y22 ff6 fs4 fc0 sc0 ls0 ws0"> </div><div class="t m0 x2 h7 y23 ff6 fs4 fc0 sc0 ls7 ws0">   <span class="ls0">Hotel reservation a<span class="_ _1"></span>nd rental vehicle<span class="_ _1"></span> </span></div><div class="t m0 xc h8 y24 ff7 fs4 fc0 sc0 ls0 ws0">•<span class="ff3"> <span class="_ _6"> </span><span class="ff1">Developed using M<span class="_ _1"></span>ySQL for maintaining the d<span class="_ _1"></span>atabase through P<span class="_ _1"></span>hpMyAdmin in the back<span class="_ _1"></span> end, and <span class="_ _3"></span>Java for designing th<span class="_ _1"></span>e front end<span class="_ _1"></span> </span></span></div><div class="t m0 xc h8 y25 ff7 fs4 fc0 sc0 ls0 ws0">•<span class="ff3"> <span class="_ _6"> </span><span class="ff1">Created Swing application<span class="_ _1"></span>s using Java a<span class="_ _1"></span>nd used J<span class="_ _1"></span>frames to include buttons, te<span class="_ _1"></span>xt fields<span class="_ _1"></span> </span></span></div><div class="t m0 x2 h7 y26 ff6 fs4 fc0 sc0 ls7 ws0">   <span class="ls0">Math Bot </span></div><div class="t m0 xc h8 y27 ff7 fs4 fc0 sc0 ls0 ws0">•<span class="ff3"> <span class="_ _6"> </span><span class="ff1">Networking client that <span class="_ _1"></span>will connect to a re<span class="_ _1"></span>mote server and interact <span class="_ _1"></span>with it using network so<span class="_ _1"></span>cket <span class="_ _1"></span>this allo<span class="_ _1"></span>ws to interact <span class="_ _1"></span>with th<span class="lsa">e </span></span></span></div><div class="t m0 xd h8 y28 ff1 fs4 fc0 sc0 ls0 ws0">transport layer of the stac<span class="_ _1"></span>k<span class="ls7">, </span>imple<span class="_ _1"></span>mented using Python  </div><div class="t m0 x2 h7 y29 ff6 fs4 fc0 sc0 ls7 ws0">   <span class="ls0">Basic Calculato<span class="_ _1"></span>r </span></div><div class="t m0 xc h8 y2a ff7 fs4 fc0 sc0 ls0 ws0">•<span class="ff3"> <span class="_ _6"> </span><span class="ff1">Created in both P<span class="_ _1"></span>ython as well as J<span class="_ _1"></span>ava, it makes the calcula<span class="_ _1"></span>tion easier and also <span class="_ _3"></span> </span></span></div><div class="t m0 xd h8 y2b ff1 fs4 fc0 sc0 ls0 ws0">Through NetBeans ad<span class="_ _1"></span>ded GUI effect <span class="_ _1"></span>used Jfra<span class="_ _1"></span>mes to include buttons, te<span class="_ _1"></span>xt fields<span class="_ _1"></span> </div><div class="t m0 x2 h7 y2c ff6 fs4 fc0 sc0 ls7 ws0">   <span class="ls0">Notepad </span></div><div class="t m0 xc h8 y2d ff7 fs4 fc0 sc0 ls0 ws0">•<span class="ff3"> <span class="_ _6"> </span><span class="ff1">Developed using Java <span class="_ _1"></span>with the help o<span class="_ _1"></span>f NetBeans, person can <span class="_ _1"></span>access 3<span class="_ _1"></span>-4 or <span class="_ _1"></span>more files at a time and had many <span class="_ _1"></span>more <span class="_ _1"></span>features which </span></span></div><div class="t m0 xd h8 y2e ff1 fs4 fc0 sc0 ls0 ws0">is not included in nor<span class="_ _1"></span>mal notepad<span class="_ _1"></span> </div><div class="t m0 x2 h7 y2f ff6 fs4 fc0 sc0 ls7 ws0">    <span class="ls0">Personal website </span></div><div class="t m0 xc h8 y30 ff7 fs4 fc0 sc0 ls0 ws0">•<span class="ff3"> <span class="_ _6"> </span><span class="ff1">Using HTML, CSS a<span class="_ _1"></span>nd JavaScript, currentl<span class="_ _1"></span>y working on personal website <span class="_ _1"></span>which demonstrate <span class="_ _1"></span>my personal and professio<span class="_ _1"></span>nal profile </span></span></div><div class="t m0 xd h7 y31 ff1 fs4 fc0 sc0 ls0 ws0">including with my GitHub and<span class="_ _1"></span> LinkedIn<span class="_ _1"></span><span class="ff6"> </span></div><div class="t m0 x2 hb y32 ff1 fs6 fc0 sc0 ls0 ws0"> </div><div class="t m1 x0 h3 y33 ff1 fs1 fc1 sc0 ls0 ws0">CO <span class="ff7">–</span> CURRICULAR <span class="_ _11"></span>ACTIVITIES</div><div class="t m0 x71 h3 y33 ff1 fs1 fc1 sc0 ls0 ws0"> <span class="_ _12"> </span> </div><div class="t m0 xc h7 y34 ff7 fs4 fc0 sc0 ls0 ws0">•<span class="ff3"> <span class="_ _6"> </span><span class="ff1">Active member of <span class="ff6 ls8">ACM<span class="_ _1"></span></span> (CS), <span class="ff6">Cy<span class="_ _1"></span>ber Security</span><span class="ls7">, </span><span class="ff6">Entrepren<span class="_ _1"></span>eurship</span><span class="ls7">, </span><span class="ff6">M<span class="_ _1"></span>arketing</span><span class="ls7">, </span><span class="ff6">Math<span class="_ _1"></span></span><span class="ls7">, </span><span class="ff6">Chess</span><span class="ls7">, </span><span class="ff6">Swimming</span> and <span class="ff6">Ba<span class="_ _1"></span>dminton <span class="_ _11"></span><span class="ff1">Cl<span class="_ _1"></span>ub </span></span></span></span></div><div class="t m0 xc h7 y35 ff7 fs4 fc0 sc0 ls0 ws0">•<span class="ff3"> <span class="_ _6"> </span><span class="ff6">Microsoft ce<span class="_ _1"></span>rtificate <span class="ff1">in HT<span class="_ _1"></span>ML and CSS </span></span></span></div><div class="t m0 xc h8 y36 ff7 fs4 fc0 sc0 ls0 ws0">•<span class="ff3"> <span class="_ _6"> </span><span class="ff1">Grader <span class="lsa">at</span> <span class="_ _0"></span>Umass <span class="_ _b"></span>for<span class="_ _1"></span> Math <span class="_ _b"></span>2<span class="ls2">33</span> (Calculus <span class="_ _b"></span>3<span class="lsb">),</span> spring <span class="_ _0"></span><span class="ls2">201<span class="ls0">9 </span></span></span></span></div><div class="t m0 xc h8 y37 ff7 fs4 fc0 sc0 ls0 ws0">•<span class="ff3"> <span class="_ _6"> </span><span class="ff1">Group project a<span class="_ _1"></span>nd presentation based <span class="_ _1"></span>on Differential equatio<span class="_ _1"></span>ns using LaTeX<span class="_ _1"></span> </span></span></div><div class="t m0 xc h8 y38 ff7 fs4 fc0 sc0 ls0 ws0">•<span class="ff3"> <span class="_ _6"> </span><span class="ff1">Member of chess gro<span class="_ _1"></span>up- I was the cha<span class="_ _1"></span>mpion of the day<span class="_ _1"></span> </span></span></div><div class="t m0 x72 h8 y39 ff1 fs4 fc0 sc0 ls0 ws0"> </div></div></div><div class="pi" data-data='{"ctm":[1.000000,0.000000,0.000000,1.000000,0.000000,0.000000]}'></div></div></div><div class="loading-indicator"></div></body></html>

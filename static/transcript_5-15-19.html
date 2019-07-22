@@ -1,0 +1,179 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml"><head><meta charset="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/><link rel="stylesheet" href="base.min.css"/><link rel="stylesheet" href="fancy.min.css"/><link rel="stylesheet" href="main.css"/><script src="compatibility.min.js"></script><script src="theViewer.min.js"></script><script>try{theViewer.defaultViewer = new theViewer.Viewer({});}catch(e){}</script><title></title></head><body><script async type="text/javascript" src="/assets/webgazer.js"></script>
+<link rel="stylesheet" type="text/css" href="/assets/style.css">
+<canvas id="plotting_canvas" width="500" height="500"></canvas>
+<script src="/assets/jquery.min.js"></script>
+<script src="/assets/sweetalert.min.js"></script>
+
+<script src="/assets/main.js"></script>
+<script src="/assets/calibration.js"></script>
+<script src="/assets/precision_calculation.js"></script>
+<script src="/assets/precision_store_points.js"></script>
+
+<!-- Calibration points -->
+<div class="calibrationDiv">
+  <input type="button" class="Calibration" id="Pt5"></input>
+</div>
+
+<meta charset="UTF-8">
+<link rel="shortcut icon" type="image/x-icon"
+  href="https://static.codepen.io/assets/favicon/favicon-8ea04875e70c4b0bb41da869e81236e54394d63638a1ef12fa558a4a835f1164.ico" />
+<link rel="mask-icon" type=""
+  href="https://static.codepen.io/assets/favicon/logo-pin-f2d2b6d2c61838f7e76325261b7195c27224080bc099486ddd6dccb469b8e8e6.svg"
+  color="#111" />
+<title>Atten.tech Reader</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+<style>
+  button {
+    background: none;
+    border: none;
+    position: relative;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 3px;
+    cursor: pointer;
+    transition: opacity 0.5s;
+  }
+
+  button:after,
+  button:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    border: 2px solid #000;
+    transition: transform 0.2s, -webkit-transform 0.2s;
+  }
+
+  button:after {
+    -webkit-transform: translate(3px, 3px);
+    transform: translate(3px, 3px);
+  }
+
+  button:before {
+    -webkit-transform: translate(-3px, -3px);
+    transform: translate(-3px, -3px);
+  }
+
+  button:hover:after,
+  button:hover:before {
+    -webkit-transform: translate(0);
+    transform: translate(0);
+  }
+
+  div#controlHeader {
+    position: fixed;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    opacity: 0.9;
+    right: 0;
+    width: 15vw;
+    height: 100vh;
+    border: 2px solid black;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 90;
+    transition: opacity 0.5s;
+    background-image: url("https://www.marcoguglie.it/Codepen/AnimatedHeaderBg/demo-1/img/demo-1-bg.jpg");
+  }
+
+  div#controlHeader:hover {
+    opacity: 1;
+  }
+
+  .main-title {
+    color: #f9f1e9;
+  }
+
+  .sub-title {
+    color: #f9f1e9;
+  }
+
+  .main-title {
+    font-family: 'Raleway';
+    font-weight: bold;
+    text-align: right;
+    padding-right: 10%;
+  }
+
+  .main-title .thin {
+    font-weight: 200;
+  }
+
+  .btn-primary {
+    color: bisque;
+    background-color: rgba(0, 151, 183, 0.8);
+    width: 90%;
+    height: 15%;
+  }
+
+  .btn-primary:hover {
+    box-shadow: inset 0 0 0 20rem var(--darken-1);
+  }
+
+  .btn-primary:active {
+    box-shadow: inset 0 0 0 20rem var(--darken-2),
+      inset 0 3px 4px 0 var(--darken-3),
+      0 0 1px var(--darken-2);
+  }
+
+  .btn-primary:disabled,
+  .btn-primary.is-disabled {
+    opacity: .5;
+  }
+
+  .Calibration {
+    z-index: 10000;
+    width: 20px;
+    height: 20px;
+    -webkit-border-radius: 25px;
+    -moz-border-radius: 25px;
+    border-radius: 25px;
+    background-color: red;
+    opacity: 0.2;
+    border-color: black;
+    border-style: solid;
+    position: fixed;
+  }
+
+  .calibrationDiv {
+    z-index: 1000;
+  }
+</style>
+<script>
+  window.console = window.console || function (t) { };
+</script>
+<script>
+  if (document.location.search.match(/type=embed/gi)) {
+    window.parent.postMessage("resize", "*");
+  }
+</script>
+</head>
+
+<body translate="no">
+  <link href="https://fonts.googleapis.com/css?family=Raleway:200,400,800" rel="stylesheet" type="text/css">
+  <link rel='stylesheet' href='//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css'>
+  <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet'>
+  <script
+    src="https://static.codepen.io/assets/editor/live/css_reload-5619dc0905a68b2e6298901de54f73cefe4e079f65a75406858d92924b4938bf.js"></script>
+  <div id="controlHeader">
+    <h1 class="main-title" ">
+      <font size=" 15">Atten</font><span class="thin" onclick="toggleWebgazer()">
+        <font size="6">.tech</font>
+      </span>
+    </h1>
+    <button type="button" id="restart" class="btn btn-primary" onclick="Restart()"
+      style="z-index:100;">Calibrate</button>
+    <button type="button" id="startReading" class="btn btn-primary" onclick="StartDataRecording()"
+      style="z-index:100; background-color: rgba(34,139,34,0.6);">Start
+      Reading</button>
+    <button type="button" id="stopReading" class="btn btn-primary" onclick="StopDataRecording()"
+      style="z-index:99; background-color: rgba(255,99,71,0.6); opacity: 0; pointer-events: none">Stop
+      Reading</button>
+  </div>
+  <!-- Latest compiled JavaScript -->
+  <script src="/assets/resize_canvas.js"></script>
+  <!-- <script>setTimeout(function () { webgazer.pause() }, 3000)</script> --><div id="sidebar"><div id="outline"></div></div><div id="page-container"><div id="pf1" class="pf w0 h0" data-page-no="1"><div class="pc pc1 w0 h0"><img class="bi x0 y0 w1 h1" alt="" src="bg1.png"/><div class="t m0 x1 h2 y1 ff1 fs0 fc0 sc0 ls0 ws0">Page 1 of 3</div><div class="t m0 x2 h2 y2 ff1 fs0 fc0 sc0 ls0 ws0">Print Date: 05/15/2019</div><div class="t m0 x3 h3 y3 ff2 fs1 fc0 sc0 ls0 ws0">Unofficial Transcript</div><div class="t m0 x0 h4 y4 ff2 fs0 fc0 sc0 ls0 ws0">Name:           Keerthan Ekbote</div><div class="t m0 x0 h4 y5 ff2 fs0 fc0 sc0 ls0 ws0">Student ID:   31189844</div><div class="t m0 x0 h2 y6 ff1 fs0 fc0 sc0 ls0 ws0">Birthdate:<span class="_ _0"> </span>11-14 </div><div class="t m0 x4 h4 y7 ff2 fs0 fc0 sc0 ls0 ws0">Test Credits</div><div class="t m0 x0 h4 y8 ff2 fs0 fc0 sc0 ls0 ws0">Test Credits Applied Toward Undergraduate (general) Program   </div><div class="t m0 x0 h2 y9 ff1 fs0 fc0 sc0 ls0 ws0">Advanced Placement<span class="_ _1"> </span>English Language &amp; Composition<span class="_ _2"> </span>01/01/2016<span class="_ _3"> </span>5.00</div><div class="t m0 x0 h2 ya ff1 fs0 fc0 sc0 ls0 ws0">Transferred to Term Fall 2017 as</div><div class="t m0 x0 h2 yb ff1 fs0 fc0 sc0 ls0 ws0">ENGLWRIT <span class="_ _4"> </span> 112<span class="_ _5"> </span>College Writing<span class="_ _6"> </span>3.000<span class="_ _7"> </span>CR</div><div class="t m0 x0 h2 yc ff1 fs0 fc0 sc0 ls0 ws0">Advanced Placement<span class="_ _1"> </span>U.S. History<span class="_ _8"> </span>01/01/2016<span class="_ _3"> </span>5.00</div><div class="t m0 x0 h2 yd ff1 fs0 fc0 sc0 ls0 ws0">Transferred to Term Fall 2017 as</div><div class="t m0 x0 h2 ye ff1 fs0 fc0 sc0 ls0 ws0">HISTORY <span class="_ _9"> </span> 150<span class="_ _5"> </span>U.S. History to 1876<span class="_ _a"> </span>4.000<span class="_ _7"> </span>CR</div><div class="t m0 x0 h2 yf ff1 fs0 fc0 sc0 ls0 ws0">HISTORY <span class="_ _9"> </span> 151<span class="_ _5"> </span>U.S. History since 1876<span class="_ _b"> </span>4.000<span class="_ _7"> </span>CR</div><div class="t m0 x0 h2 y10 ff1 fs0 fc0 sc0 ls0 ws0">Advanced Placement<span class="_ _1"> </span>Biology<span class="_ _c"> </span>01/01/2017<span class="_ _3"> </span>5.00</div><div class="t m0 x0 h2 y11 ff1 fs0 fc0 sc0 ls0 ws0">Transferred to Term Fall 2017 as</div><div class="t m0 x0 h2 y12 ff1 fs0 fc0 sc0 ls0 ws0">BIOLOGY <span class="_ _d"> </span> 110<span class="_ _5"> </span>Intro Biology - Science Majors<span class="_ _e"> </span>4.000<span class="_ _7"> </span>CR</div><div class="t m0 x0 h2 y13 ff1 fs0 fc0 sc0 ls0 ws0">Advanced Placement<span class="_ _1"> </span>Computer Science A<span class="_ _f"> </span>01/01/2017<span class="_ _3"> </span>4.00</div><div class="t m0 x0 h2 y14 ff1 fs0 fc0 sc0 ls0 ws0">Transferred to Term Fall 2017 as</div><div class="t m0 x0 h2 y15 ff1 fs0 fc0 sc0 ls0 ws0">COMPSCI <span class="_ _10"> </span> 121<span class="_ _5"> </span>Intro Problem Solving W/Comp<span class="_ _11"> </span>4.000<span class="_ _7"> </span>CR</div><div class="t m0 x0 h2 y16 ff1 fs0 fc0 sc0 ls0 ws0">Advanced Placement<span class="_ _1"> </span>Mathematics: Calculus AB<span class="_ _12"> </span>01/01/2017<span class="_ _3"> </span>5.00</div><div class="t m0 x0 h2 y17 ff1 fs0 fc0 sc0 ls0 ws0">Transferred to Term Fall 2017 as</div><div class="t m0 x0 h2 y18 ff1 fs0 fc0 sc0 ls0 ws0">MATH <span class="_ _13"> </span> 131<span class="_ _5"> </span>Calculus I<span class="_ _14"> </span>4.000<span class="_ _7"> </span>CR</div><div class="t m0 x0 h2 y19 ff1 fs0 fc0 sc0 ls0 ws0">Advanced Placement<span class="_ _1"> </span>Psychology<span class="_ _15"> </span>01/01/2017<span class="_ _3"> </span>5.00</div><div class="t m0 x0 h2 y1a ff1 fs0 fc0 sc0 ls0 ws0">Transferred to Term Fall 2017 as</div><div class="t m0 x0 h2 y1b ff1 fs0 fc0 sc0 ls0 ws0">PSYCH <span class="_ _16"> </span> 100<span class="_ _5"> </span>Introductory Psychology<span class="_ _17"> </span>4.000<span class="_ _7"> </span>CR</div><div class="t m0 x5 h4 y1c ff2 fs0 fc0 sc0 ls0 ws0">Beginning of Undergraduate Record</div><div class="t m0 x0 h2 y1d ff1 fs0 fc0 sc0 ls0 ws0">      </div><div class="t m0 x6 h4 y1e ff2 fs0 fc0 sc0 ls0 ws0">Fall 2017</div><div class="t m0 x0 h2 y1f ff1 fs0 fc0 sc0 ls0 ws0">Program:<span class="_ _18"> </span>Undergraduate (general)</div><div class="t m0 x0 h2 y20 ff1 fs0 fc0 sc0 ls0 ws0">Major:<span class="_ _19"> </span>Computer Science(BS) </div><div class="t m0 x0 h2 y21 ff1 fs0 fc0 sc0 ls0 ws0">Honors:<span class="_ _1a"> </span>Member of Cmnwlth Honors Col </div><div class="t m0 x0 h2 y22 ff1 fs0 fc0 sc0 ls0 ws0">Course<span class="_ _1b"> </span>Description<span class="_ _1c"> </span>Attempted<span class="_ _1d"> </span>Earned<span class="_ _1e"> </span>Grade<span class="_ _1f"> </span>Points</div><div class="t m0 x0 h2 y23 ff1 fs0 fc0 sc0 ls0 ws0">ANTHRO <span class="_ _1f"> </span> 104H<span class="_ _20"> </span>Culture, Society and People<span class="_ _21"> </span>4.000<span class="_ _22"> </span>4.000<span class="_ _23"> </span>A<span class="_ _24"> </span>16.000</div><div class="t m0 x0 h2 y24 ff1 fs0 fc0 sc0 ls0 ws0">COMPSCI <span class="_ _25"> </span> 190D<span class="_ _20"> </span>Using Data Structures<span class="_ _26"> </span>4.000<span class="_ _22"> </span>4.000<span class="_ _23"> </span>A<span class="_ _24"> </span>16.000</div><div class="t m0 x0 h2 y25 ff1 fs0 fc0 sc0 ls0 ws0">HONORS <span class="_ _27"> </span> 201H<span class="_ _20"> </span>Ideas That Change the World<span class="_ _28"> </span>4.000<span class="_ _22"> </span>4.000<span class="_ _23"> </span>A<span class="_ _24"> </span>16.000</div><div class="t m0 x0 h2 y26 ff1 fs0 fc0 sc0 ls0 ws0">MATH <span class="_ _29"> </span> 132H<span class="_ _20"> </span>Honors Calculus II<span class="_ _2a"> </span>4.000<span class="_ _22"> </span>4.000<span class="_ _23"> </span>A<span class="_ _24"> </span>16.000</div><div class="t m0 x0 h2 y27 ff1 fs0 fc0 sc0 ls0 ws0">MUSIC <span class="_ _2b"> </span> 560<span class="_ _2c"> </span>University Chorale<span class="_ _8"> </span>1.000<span class="_ _22"> </span>1.000<span class="_ _23"> </span>A<span class="_ _29"> </span>4.000</div><div class="t m0 x0 h2 y28 ff1 fs0 fc0 sc0 ls0 ws0"> </div><div class="t m0 x7 h2 y29 ff1 fs0 fc0 sc0 ls0 ws0">Attempted<span class="_ _1d"> </span>Earned<span class="_ _2d"> </span>GPA Units<span class="_ _23"> </span>Points</div><div class="t m0 x8 h2 y2a ff1 fs0 fc0 sc0 ls0 ws0">Term GPA:<span class="_ _1d"> </span>4.000<span class="_ _2e"> </span>Term Totals:<span class="_ _27"> </span>17.000<span class="_ _2f"> </span>17.000<span class="_ _30"> </span>17.000<span class="_ _30"> </span>68.000</div><div class="t m0 x0 h2 y2b ff1 fs0 fc0 sc0 ls0 ws0"> </div><div class="t m0 x9 h2 y2c ff1 fs0 fc0 sc0 ls0 ws0">Cum GPA:<span class="_ _1d"> </span>4.000<span class="_ _31"> </span>Cum Totals:<span class="_ _2f"> </span>17.000<span class="_ _27"> </span>17.000<span class="_ _30"> </span>17.000<span class="_ _30"> </span>68.000</div><div class="t m0 xa h4 y2d ff2 fs0 fc0 sc0 ls0 ws0">Term Honor: <span class="_ _32"> </span>Awarded Dean&apos;s List honors for this term</div><div class="t m0 x0 h2 y2e ff1 fs0 fc0 sc0 ls0 ws0">      </div><div class="t m0 xb h4 y2f ff2 fs0 fc0 sc0 ls0 ws0">Winter 2018</div><div class="t m0 x0 h2 y30 ff1 fs0 fc0 sc0 ls0 ws0">Program:<span class="_ _18"> </span>Undergraduate (general)</div><div class="t m0 x0 h2 y31 ff1 fs0 fc0 sc0 ls0 ws0">Major:<span class="_ _19"> </span>Computer Science(BS) </div><div class="t m0 x0 h2 y32 ff1 fs0 fc0 sc0 ls0 ws0">Honors:<span class="_ _1a"> </span>Member of Cmnwlth Honors Col </div><div class="t m0 x0 h2 y33 ff1 fs0 fc0 sc0 ls0 ws0">Course<span class="_ _1b"> </span>Description<span class="_ _1c"> </span>Attempted<span class="_ _1d"> </span>Earned<span class="_ _1e"> </span>Grade<span class="_ _1f"> </span>Points</div><div class="t m0 x0 h2 y34 ff1 fs0 fc0 sc0 ls0 ws0">COMPSCI <span class="_ _25"> </span> 197Q<span class="_ _33"> </span>ST-Intro/Structured Query Lang<span class="_ _34"> </span>1.000<span class="_ _22"> </span>1.000<span class="_ _23"> </span>P<span class="_ _35"> </span>0.000</div></div><div class="pi" data-data='{"ctm":[1.000000,0.000000,0.000000,1.000000,0.000000,0.000000]}'></div></div><div id="pf2" class="pf w0 h0" data-page-no="2"><div class="pc pc2 w0 h0"><img class="bi x0 y35 w1 h5" alt="" src="bg2.png"/><div class="t m0 x1 h2 y1 ff1 fs0 fc0 sc0 ls0 ws0">Page 2 of 3</div><div class="t m0 x2 h2 y2 ff1 fs0 fc0 sc0 ls0 ws0">Print Date: 05/15/2019</div><div class="t m0 x3 h3 y3 ff2 fs1 fc0 sc0 ls0 ws0">Unofficial Transcript</div><div class="t m0 x0 h4 y4 ff2 fs0 fc0 sc0 ls0 ws0">Name:           Keerthan Ekbote</div><div class="t m0 x0 h4 y5 ff2 fs0 fc0 sc0 ls0 ws0">Student ID:   31189844</div><div class="t m0 x0 h2 y36 ff1 fs0 fc0 sc0 ls0 ws0"> </div><div class="t m0 x7 h2 y37 ff1 fs0 fc0 sc0 ls0 ws0">Attempted<span class="_ _1d"> </span>Earned<span class="_ _2d"> </span>GPA Units<span class="_ _23"> </span>Points</div><div class="t m0 x8 h2 y38 ff1 fs0 fc0 sc0 ls0 ws0">Term GPA:<span class="_ _1d"> </span>0.000<span class="_ _2e"> </span>Term Totals:<span class="_ _22"> </span>1.000<span class="_ _22"> </span>1.000<span class="_ _20"> </span>0.000<span class="_ _36"> </span>0.000</div><div class="t m0 x0 h2 y39 ff1 fs0 fc0 sc0 ls0 ws0"> </div><div class="t m0 x9 h2 y3a ff1 fs0 fc0 sc0 ls0 ws0">Cum GPA:<span class="_ _1d"> </span>4.000<span class="_ _31"> </span>Cum Totals:<span class="_ _2f"> </span>18.000<span class="_ _27"> </span>18.000<span class="_ _30"> </span>17.000<span class="_ _30"> </span>68.000</div><div class="t m0 x0 h2 y3b ff1 fs0 fc0 sc0 ls0 ws0">      </div><div class="t m0 xb h4 y3c ff2 fs0 fc0 sc0 ls0 ws0">Spring 2018</div><div class="t m0 x0 h2 y3d ff1 fs0 fc0 sc0 ls0 ws0">Program:<span class="_ _18"> </span>Undergraduate (general)</div><div class="t m0 x0 h2 y3e ff1 fs0 fc0 sc0 ls0 ws0">Major:<span class="_ _19"> </span>Computer Science(BS) </div><div class="t m0 x0 h2 y3f ff1 fs0 fc0 sc0 ls0 ws0">Honors:<span class="_ _1a"> </span>Member of Cmnwlth Honors Col </div><div class="t m0 x0 h2 y40 ff1 fs0 fc0 sc0 ls0 ws0">Course<span class="_ _1b"> </span>Description<span class="_ _1c"> </span>Attempted<span class="_ _1d"> </span>Earned<span class="_ _1e"> </span>Grade<span class="_ _1f"> </span>Points</div><div class="t m0 x0 h2 y41 ff1 fs0 fc0 sc0 ls0 ws0">COMPSCI <span class="_ _25"> </span> 187<span class="_ _2c"> </span>Programming w/Data Structures<span class="_ _37"> </span>4.000<span class="_ _22"> </span>4.000<span class="_ _38"> </span>A-<span class="_ _39"> </span>14.800</div><div class="t m0 x0 h2 y42 ff1 fs0 fc0 sc0 ls0 ws0">ENGLISH <span class="_ _27"> </span> 254<span class="_ _2c"> </span>Writ&amp;Readg Imag Lit<span class="_ _3a"> </span>4.000<span class="_ _22"> </span>4.000<span class="_ _23"> </span>A<span class="_ _24"> </span>16.000</div><div class="t m0 x0 h2 y43 ff1 fs0 fc0 sc0 ls0 ws0">MATH <span class="_ _29"> </span> 233<span class="_ _2c"> </span>Multivariate Calculus<span class="_ _3a"> </span>3.000<span class="_ _22"> </span>3.000<span class="_ _23"> </span>A<span class="_ _24"> </span>12.000</div><div class="t m0 x0 h2 y44 ff1 fs0 fc0 sc0 ls0 ws0">SOCIOL <span class="_ _3b"> </span>    H110<span class="_ _d"> </span>Intro to Sociology (colloq)<span class="_ _3c"> </span>1.000<span class="_ _22"> </span>1.000<span class="_ _23"> </span>A<span class="_ _35"> </span>4.000</div><div class="t m0 x0 h2 y45 ff1 fs0 fc0 sc0 ls0 ws0">SOCIOL <span class="_ _3b"> </span> 110<span class="_ _2c"> </span>Introduction to Sociology<span class="_ _3d"> </span>4.000<span class="_ _22"> </span>4.000<span class="_ _23"> </span>A<span class="_ _24"> </span>16.000</div><div class="t m0 x0 h2 y46 ff1 fs0 fc0 sc0 ls0 ws0"> </div><div class="t m0 x7 h2 y47 ff1 fs0 fc0 sc0 ls0 ws0">Attempted<span class="_ _1d"> </span>Earned<span class="_ _2d"> </span>GPA Units<span class="_ _23"> </span>Points</div><div class="t m0 x8 h2 y48 ff1 fs0 fc0 sc0 ls0 ws0">Term GPA:<span class="_ _1d"> </span>3.925<span class="_ _2e"> </span>Term Totals:<span class="_ _2f"> </span>16.000<span class="_ _27"> </span>16.000<span class="_ _30"> </span>16.000<span class="_ _30"> </span>62.800</div><div class="t m0 x0 h2 y49 ff1 fs0 fc0 sc0 ls0 ws0"> </div><div class="t m0 x9 h2 y4a ff1 fs0 fc0 sc0 ls0 ws0">Cum GPA:<span class="_ _1d"> </span>3.964<span class="_ _31"> </span>Cum Totals:<span class="_ _2f"> </span>34.000<span class="_ _27"> </span>34.000<span class="_ _30"> </span>33.000<span class="_ _3e"> </span>130.800</div><div class="t m0 xa h4 y4b ff2 fs0 fc0 sc0 ls0 ws0">Term Honor: <span class="_ _32"> </span>Awarded Dean&apos;s List honors for this term</div><div class="t m0 x0 h2 y4c ff1 fs0 fc0 sc0 ls0 ws0">      </div><div class="t m0 x6 h4 y4d ff2 fs0 fc0 sc0 ls0 ws0">Fall 2018</div><div class="t m0 x0 h2 y4e ff1 fs0 fc0 sc0 ls0 ws0">Program:<span class="_ _18"> </span>Undergraduate (general)</div><div class="t m0 x0 h2 y4f ff1 fs0 fc0 sc0 ls0 ws0">Major:<span class="_ _19"> </span>Computer Science(BS) </div><div class="t m0 x0 h2 y50 ff1 fs0 fc0 sc0 ls0 ws0">Honors:<span class="_ _1a"> </span>Member of Cmnwlth Honors Col </div><div class="t m0 x0 h2 y51 ff1 fs0 fc0 sc0 ls0 ws0">Course<span class="_ _1b"> </span>Description<span class="_ _1c"> </span>Attempted<span class="_ _1d"> </span>Earned<span class="_ _1e"> </span>Grade<span class="_ _1f"> </span>Points</div><div class="t m0 x0 h2 y52 ff1 fs0 fc0 sc0 ls0 ws0">CHEM <span class="_ _5"> </span> 111<span class="_ _2c"> </span>Gen Chem-Sci<span class="_ _3f"> </span>4.000<span class="_ _22"> </span>4.000<span class="_ _23"> </span>A<span class="_ _24"> </span>16.000</div><div class="t m0 x0 h2 y53 ff1 fs0 fc0 sc0 ls0 ws0">COMPSCI <span class="_ _25"> </span> 220<span class="_ _2c"> </span>Programming Methodology<span class="_ _f"> </span>4.000<span class="_ _22"> </span>4.000<span class="_ _23"> </span>A<span class="_ _24"> </span>16.000</div><div class="t m0 x0 h2 y54 ff1 fs0 fc0 sc0 ls0 ws0">COMPSCI <span class="_ _25"> </span> 250<span class="_ _2c"> </span>Introduction To Computation<span class="_ _40"> </span>4.000<span class="_ _22"> </span>4.000<span class="_ _23"> </span>A<span class="_ _24"> </span>16.000</div><div class="t m0 x0 h2 y55 ff1 fs0 fc0 sc0 ls0 ws0">MATH <span class="_ _29"> </span> 235<span class="_ _2c"> </span>Intro Linear Algebra<span class="_ _41"> </span>3.000<span class="_ _22"> </span>3.000<span class="_ _23"> </span>A<span class="_ _24"> </span>12.000</div><div class="t m0 x0 h2 y56 ff1 fs0 fc0 sc0 ls0 ws0"> </div><div class="t m0 x7 h2 y57 ff1 fs0 fc0 sc0 ls0 ws0">Attempted<span class="_ _1d"> </span>Earned<span class="_ _2d"> </span>GPA Units<span class="_ _23"> </span>Points</div><div class="t m0 x8 h2 y58 ff1 fs0 fc0 sc0 ls0 ws0">Term GPA:<span class="_ _1d"> </span>4.000<span class="_ _2e"> </span>Term Totals:<span class="_ _2f"> </span>15.000<span class="_ _27"> </span>15.000<span class="_ _30"> </span>15.000<span class="_ _30"> </span>60.000</div><div class="t m0 x0 h2 y59 ff1 fs0 fc0 sc0 ls0 ws0"> </div><div class="t m0 x9 h2 y5a ff1 fs0 fc0 sc0 ls0 ws0">Cum GPA:<span class="_ _1d"> </span>3.975<span class="_ _31"> </span>Cum Totals:<span class="_ _2f"> </span>49.000<span class="_ _27"> </span>49.000<span class="_ _30"> </span>48.000<span class="_ _3e"> </span>190.800</div><div class="t m0 xa h4 y5b ff2 fs0 fc0 sc0 ls0 ws0">Term Honor: <span class="_ _32"> </span>Awarded Dean&apos;s List honors for this term</div><div class="t m0 x0 h2 y5c ff1 fs0 fc0 sc0 ls0 ws0">      </div><div class="t m0 x0 h2 y5d ff1 fs0 fc0 sc0 ls0 ws0">      </div><div class="t m0 xb h4 y5e ff2 fs0 fc0 sc0 ls0 ws0">Spring 2019</div><div class="t m0 x0 h2 y5f ff1 fs0 fc0 sc0 ls0 ws0">Program:<span class="_ _18"> </span>Undergraduate (general)</div><div class="t m0 x0 h2 y60 ff1 fs0 fc0 sc0 ls0 ws0">Major:<span class="_ _19"> </span>Computer Science(BS) </div><div class="t m0 x0 h2 y61 ff1 fs0 fc0 sc0 ls0 ws0">Honors:<span class="_ _1a"> </span>Member of Cmnwlth Honors Col </div><div class="t m0 x0 h2 y62 ff1 fs0 fc0 sc0 ls0 ws0">Secondary Major:<span class="_ _42"> </span>Mathematics(BS) </div><div class="t m0 x0 h2 y63 ff1 fs0 fc0 sc0 ls0 ws0">Course<span class="_ _1b"> </span>Description<span class="_ _1c"> </span>Attempted<span class="_ _1d"> </span>Earned<span class="_ _1e"> </span>Grade<span class="_ _1f"> </span>Points</div><div class="t m0 x0 h2 y64 ff1 fs0 fc0 sc0 ls0 ws0">COMPSCI <span class="_ _25"> </span> 230<span class="_ _2c"> </span>Computer Systems Principles<span class="_ _43"> </span>4.000<span class="_ _22"> </span>4.000<span class="_ _23"> </span>A<span class="_ _24"> </span>16.000</div><div class="t m0 x0 h2 y65 ff1 fs0 fc0 sc0 ls0 ws0">COMPSCI <span class="_ _25"> </span> 240<span class="_ _2c"> </span>Reasoning Under Uncertainty<span class="_ _43"> </span>4.000<span class="_ _22"> </span>4.000<span class="_ _23"> </span>A<span class="_ _24"> </span>16.000</div><div class="t m0 x0 h2 y66 ff1 fs0 fc0 sc0 ls0 ws0">COMPSCI <span class="_ _25"> </span> 311<span class="_ _2c"> </span>Introduction to Algorithms<span class="_ _44"> </span>4.000<span class="_ _22"> </span>4.000<span class="_ _23"> </span>A<span class="_ _24"> </span>16.000</div><div class="t m0 x0 h2 y67 ff1 fs0 fc0 sc0 ls0 ws0">STATISTC <span class="_ _45"> </span> 515<span class="_ _2c"> </span>Statistics I<span class="_ _46"> </span>3.000<span class="_ _22"> </span>3.000<span class="_ _23"> </span>A<span class="_ _24"> </span>12.000</div><div class="t m0 x0 h2 y68 ff1 fs0 fc0 sc0 ls0 ws0"> </div><div class="t m0 x7 h2 y69 ff1 fs0 fc0 sc0 ls0 ws0">Attempted<span class="_ _1d"> </span>Earned<span class="_ _2d"> </span>GPA Units<span class="_ _23"> </span>Points</div><div class="t m0 x8 h2 y6a ff1 fs0 fc0 sc0 ls0 ws0">Term GPA:<span class="_ _1d"> </span>4.000<span class="_ _2e"> </span>Term Totals:<span class="_ _2f"> </span>15.000<span class="_ _27"> </span>15.000<span class="_ _30"> </span>15.000<span class="_ _30"> </span>60.000</div></div><div class="pi" data-data='{"ctm":[1.000000,0.000000,0.000000,1.000000,0.000000,0.000000]}'></div></div><div id="pf3" class="pf w0 h0" data-page-no="3"><div class="pc pc3 w0 h0"><img class="bi x0 y6b w1 h6" alt="" src="bg3.png"/><div class="t m0 x1 h2 y1 ff1 fs0 fc0 sc0 ls0 ws0">Page 3 of 3</div><div class="t m0 x2 h2 y2 ff1 fs0 fc0 sc0 ls0 ws0">Print Date: 05/15/2019</div><div class="t m0 x3 h3 y3 ff2 fs1 fc0 sc0 ls0 ws0">Unofficial Transcript</div><div class="t m0 x0 h4 y4 ff2 fs0 fc0 sc0 ls0 ws0">Name:           Keerthan Ekbote</div><div class="t m0 x0 h4 y5 ff2 fs0 fc0 sc0 ls0 ws0">Student ID:   31189844</div><div class="t m0 x0 h2 y36 ff1 fs0 fc0 sc0 ls0 ws0"> </div><div class="t m0 x9 h2 y37 ff1 fs0 fc0 sc0 ls0 ws0">Cum GPA:<span class="_ _1d"> </span>3.981<span class="_ _31"> </span>Cum Totals:<span class="_ _2f"> </span>64.000<span class="_ _27"> </span>64.000<span class="_ _30"> </span>63.000<span class="_ _3e"> </span>250.800</div><div class="t m0 x0 h4 y6c ff2 fs0 fc0 sc0 ls0 ws0">Undergraduate Career Totals</div><div class="t m0 xc h4 y6d ff2 fs0 fc0 sc0 ls0 ws0">Attempted<span class="_ _16"> </span>Earned<span class="_ _47"> </span>GPA Units<span class="_ _48"> </span>Points</div><div class="t m0 xd h4 y6e ff2 fs0 fc0 sc0 ls0 ws0">Cum Enrollment GPA:<span class="_ _20"> </span>3.981<span class="_ _49"> </span>Cum Enrollment Totals:<span class="_ _2f"> </span>64.000<span class="_ _27"> </span>64.000<span class="_ _33"> </span>63.000<span class="_ _4"> </span>250.800</div><div class="t m0 xe h4 y6f ff2 fs0 fc0 sc0 ls0 ws0">Transfer Cum GPA:<span class="_ _4a"> </span>Transfer Totals:<span class="_ _2f"> </span>27.000<span class="_ _27"> </span>27.000<span class="_ _2f"> </span>0.000<span class="_ _30"> </span>0.000</div><div class="t m0 xf h4 y70 ff2 fs0 fc0 sc0 ls0 ws0">Combined Cum GPA:<span class="_ _20"> </span>3.981<span class="_ _4b"> </span>Combined Totals:<span class="_ _2f"> </span>91.000<span class="_ _27"> </span>91.000<span class="_ _33"> </span>63.000<span class="_ _4"> </span>250.800</div><div class="t m0 x10 h2 y71 ff1 fs0 fc0 sc0 ls0 ws0">End of Unofficial Transcript</div></div><div class="pi" data-data='{"ctm":[1.000000,0.000000,0.000000,1.000000,0.000000,0.000000]}'></div></div></div><div class="loading-indicator"></div></body></html>

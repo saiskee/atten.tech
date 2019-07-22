@@ -1,0 +1,179 @@
+<script async type="text/javascript" src="/assets/webgazer.js"></script>
+<link rel="stylesheet" type="text/css" href="/assets/style.css">
+<canvas id="plotting_canvas" width="500" height="500"></canvas>
+<script src="/assets/jquery.min.js"></script>
+<script src="/assets/sweetalert.min.js"></script>
+
+<script src="/assets/main.js"></script>
+<script src="/assets/calibration.js"></script>
+<script src="/assets/precision_calculation.js"></script>
+<script src="/assets/precision_store_points.js"></script>
+
+<!-- Calibration points -->
+<div class="calibrationDiv">
+  <input type="button" class="Calibration" id="Pt5"></input>
+</div>
+
+<meta charset="UTF-8">
+<link rel="shortcut icon" type="image/x-icon"
+  href="https://static.codepen.io/assets/favicon/favicon-8ea04875e70c4b0bb41da869e81236e54394d63638a1ef12fa558a4a835f1164.ico" />
+<link rel="mask-icon" type=""
+  href="https://static.codepen.io/assets/favicon/logo-pin-f2d2b6d2c61838f7e76325261b7195c27224080bc099486ddd6dccb469b8e8e6.svg"
+  color="#111" />
+<title>Atten.tech Reader</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+<style>
+  button {
+    background: none;
+    border: none;
+    position: relative;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 3px;
+    cursor: pointer;
+    transition: opacity 0.5s;
+  }
+
+  button:after,
+  button:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    border: 2px solid #000;
+    transition: transform 0.2s, -webkit-transform 0.2s;
+  }
+
+  button:after {
+    -webkit-transform: translate(3px, 3px);
+    transform: translate(3px, 3px);
+  }
+
+  button:before {
+    -webkit-transform: translate(-3px, -3px);
+    transform: translate(-3px, -3px);
+  }
+
+  button:hover:after,
+  button:hover:before {
+    -webkit-transform: translate(0);
+    transform: translate(0);
+  }
+
+  div#controlHeader {
+    position: fixed;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    opacity: 0.9;
+    right: 0;
+    width: 15vw;
+    height: 100vh;
+    border: 2px solid black;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 90;
+    transition: opacity 0.5s;
+    background-image: url("https://www.marcoguglie.it/Codepen/AnimatedHeaderBg/demo-1/img/demo-1-bg.jpg");
+  }
+
+  div#controlHeader:hover {
+    opacity: 1;
+  }
+
+  .main-title {
+    color: #f9f1e9;
+  }
+
+  .sub-title {
+    color: #f9f1e9;
+  }
+
+  .main-title {
+    font-family: 'Raleway';
+    font-weight: bold;
+    text-align: right;
+    padding-right: 10%;
+  }
+
+  .main-title .thin {
+    font-weight: 200;
+  }
+
+  .btn-primary {
+    color: bisque;
+    background-color: rgba(0, 151, 183, 0.8);
+    width: 90%;
+    height: 15%;
+  }
+
+  .btn-primary:hover {
+    box-shadow: inset 0 0 0 20rem var(--darken-1);
+  }
+
+  .btn-primary:active {
+    box-shadow: inset 0 0 0 20rem var(--darken-2),
+      inset 0 3px 4px 0 var(--darken-3),
+      0 0 1px var(--darken-2);
+  }
+
+  .btn-primary:disabled,
+  .btn-primary.is-disabled {
+    opacity: .5;
+  }
+
+  .Calibration {
+    z-index: 10000;
+    width: 20px;
+    height: 20px;
+    -webkit-border-radius: 25px;
+    -moz-border-radius: 25px;
+    border-radius: 25px;
+    background-color: red;
+    opacity: 0.2;
+    border-color: black;
+    border-style: solid;
+    position: fixed;
+  }
+
+  .calibrationDiv {
+    z-index: 1000;
+  }
+</style>
+<script>
+  window.console = window.console || function (t) { };
+</script>
+<script>
+  if (document.location.search.match(/type=embed/gi)) {
+    window.parent.postMessage("resize", "*");
+  }
+</script>
+</head>
+
+<body translate="no">
+  <link href="https://fonts.googleapis.com/css?family=Raleway:200,400,800" rel="stylesheet" type="text/css">
+  <link rel='stylesheet' href='//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css'>
+  <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet'>
+  <script
+    src="https://static.codepen.io/assets/editor/live/css_reload-5619dc0905a68b2e6298901de54f73cefe4e079f65a75406858d92924b4938bf.js"></script>
+  <div id="controlHeader">
+    <h1 class="main-title" ">
+      <font size=" 15">Atten</font><span class="thin" onclick="toggleWebgazer()">
+        <font size="6">.tech</font>
+      </span>
+    </h1>
+    <button type="button" id="restart" class="btn btn-primary" onclick="Restart()"
+      style="z-index:100;">Calibrate</button>
+    <button type="button" id="startReading" class="btn btn-primary" onclick="StartDataRecording()"
+      style="z-index:100; background-color: rgba(34,139,34,0.6);">Start
+      Reading</button>
+    <button type="button" id="stopReading" class="btn btn-primary" onclick="StopDataRecording()"
+      style="z-index:99; background-color: rgba(255,99,71,0.6); opacity: 0; pointer-events: none">Stop
+      Reading</button>
+  </div>
+  <!-- Latest compiled JavaScript -->
+  <script src="/assets/resize_canvas.js"></script>
+  <!-- <script>setTimeout(function () { webgazer.pause() }, 3000)</script> -->

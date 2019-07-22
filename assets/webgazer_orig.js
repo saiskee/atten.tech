@@ -4,10 +4,7 @@
 
 * Licensed under GPLv3. Companies with a valuation of less than $10M can use WebGazer.js under LGPLv3. 
 */
-var mouseCal = true;
-function mouseCalibration(x){
-  mouseCal = x;
-}
+
 /**
  * Real-time object detector based on the Viola Jones Framework.
  * Compatible to OpenCV Haar Cascade Classifiers (stump based only).
@@ -1310,7 +1307,7 @@ var objectdetect = (function() {
 
   /**
    * Unites two dynamic sets containing objects i and j, say Si and Sj, into
-   * a new set that Si ∪ Sj, assuming that Si ∩ Sj = ∅;
+   * a new set that Si âˆª Sj, assuming that Si âˆ© Sj = âˆ…;
    * @param {number} i
    * @param {number} j
    */
@@ -2009,10 +2006,10 @@ var objectdetect = (function() {
   };
 
   /**
-   * Matches sets of features {mi} and {m′j} extracted from two images taken
+   * Matches sets of features {mi} and {mâ€²j} extracted from two images taken
    * from similar, and often successive, viewpoints. A classical procedure
    * runs as follows. For each point {mi} in the first image, search in a
-   * region of the second image around location {mi} for point {m′j}. The
+   * region of the second image around location {mi} for point {mâ€²j}. The
    * search is based on the similarity of the local image windows, also known
    * as kernel windows, centered on the points, which strongly characterizes
    * the points when the images are sufficiently close. Once each keypoint is
@@ -2134,7 +2131,7 @@ var objectdetect = (function() {
    * corner candidate p. The detector classifies p as a corner if there exists
    * a set of n contiguous pixelsin the circle which are all brighter than the
    * intensity of the candidate pixel Ip plus a threshold t, or all darker
-   * than Ip − t.
+   * than Ip âˆ’ t.
    *
    *       15 00 01
    *    14          02
@@ -5121,6 +5118,21 @@ var clm = {
 				}
 			}
 
+			/*print weights*/
+			/*sketchCC.clearRect(0, 0, sketchW, sketchH);
+			var nuWeights;
+			for (var i = 0;i < numPatches;i++) {
+				nuWeights = weights[i].map(function(x) {return x*2000+127;});
+				drawData(sketchCC, nuWeights, patchSize, patchSize, false, patchPositions[i][0]-(patchSize/2), patchPositions[i][1]-(patchSize/2));
+			}*/
+
+			// print patches
+			/*sketchCC.clearRect(0, 0, sketchW, sketchH);
+			for (var i = 0;i < numPatches;i++) {
+				if ([27,32,44,50].indexOf(i) > -1) {
+					drawData(sketchCC, patches[i], pw, pl, false, patchPositions[i][0]-(pw/2), patchPositions[i][1]-(pl/2));
+				}
+			}*/
 			if (patchType == "SVM") {
 				if (typeof(webglFi) !== "undefined") {
 					responses = getWebGLResponses(patches);
@@ -10689,14 +10701,13 @@ function store_points(x, y, k) {
     /**
      * Runs every available animation frame if webgazer is not paused
      */
-   // var smoothingVals = new webgazer.util.DataWindow(4);
+    var smoothingVals = new webgazer.util.DataWindow(4);
     var k = 0;
-    var smoothArray = [];
-    var smoothvar = 3;
+
     function loop() {
-        
+
         if (!paused) {
-          
+
             // Paint the latest video frame into the canvas which will be analyzed by WebGazer
             // [20180729 JT] Why do we need to do this? clmTracker does this itself _already_, which is just duplicating the work.
             // Is it because other trackers need a canvas instead of an img/video element?
@@ -10704,46 +10715,10 @@ function store_points(x, y, k) {
             
             // Get gaze prediction (ask clm to track; pass the data to the regressor; get back a prediction)
             latestGazeData = getPrediction();
-
-            //smoothing array calculations, take average of 20 gaze Data's
-            if (smoothArray.length < smoothvar){
-              smoothArray.push(latestGazeData);
-            }else{
-              let x = 0; let y = 0;
-              for (let i = 0; i < smoothArray.length; i++){
-                try{
-                x += smoothArray[i].x
-                y += smoothArray[i].y
-              } catch {}
-              }
-
-              x = x/smoothvar;
-              y = y/smoothvar;
-              let max = 18;
-              for (let i = 0; i < smoothArray.length; i++){
-                try{
-
-                let dist =  Math.sqrt((smoothArray[i].x-x)**2+(smoothArray[i].y-y)**2)
-                max = max < dist ? dist : max;
-                }
-                catch{}
-              }
-
-              smoothArray = [];
-              if (max <= 200){
-              try{
-              latestGazeData.x = x;
-              latestGazeData.y = y;
-              gazeDot.style.transform = 'translate3d(' + latestGazeData.x + 'px,' + latestGazeData.y + 'px,0)';
-              gazeDot.style.width = gazeDot.style.height = max+'px';
-              }catch{}
-            //   // Count time
+            // Count time
             var elapsedTime = performance.now() - clockStart;
             // [20180611 James Tompkin]: What does this line do?
             callback(latestGazeData, elapsedTime);
-          }
-            }
-            
 
             // Draw face overlay
             if( webgazer.params.showFaceOverlay )
@@ -10762,7 +10737,7 @@ function store_points(x, y, k) {
                 checkEyesInValidationBox();
 
 
-            /*if( latestGazeData ) {
+            if( latestGazeData ) {
 
                 smoothingVals.push(latestGazeData);
                 var x = 0;
@@ -10784,8 +10759,8 @@ function store_points(x, y, k) {
                     }
                 }
                 // GazeDot
-                // gazeDot.style.transform = 'translate3d(' + pred.x + 'px,' + pred.y + 'px,0)';
-            }*/
+                gazeDot.style.transform = 'translate3d(' + pred.x + 'px,' + pred.y + 'px,0)';
+            }
 
             requestAnimationFrame(loop);
         }
@@ -10811,7 +10786,6 @@ function store_points(x, y, k) {
             if( latestEyeFeatures )
                 regs[reg].addData(latestEyeFeatures, [x, y], eventType);
         }
-        
     };
 
     /**
@@ -10819,11 +10793,6 @@ function store_points(x, y, k) {
      * @param {Event} event - The listened event
      */
     var clickListener = function(event) {
-
-      if (!mouseCal){
-        return;
-			}
-			
         recordScreenPosition(event.clientX, event.clientY, eventTypes[0]); // eventType[0] === 'click'
     };
 
@@ -10832,18 +10801,17 @@ function store_points(x, y, k) {
      * @param {Event} event - The listened event
      */
     var moveListener = function(event) {
-			
-        if (paused || !mouseCal ) {
+        if (paused) {
             return;
         }
-				
+
         var now = performance.now();
         if (now < moveClock + webgazer.params.moveTickSize) {
             return;
         } else {
             moveClock = now;
         }
-        recordScreenPosition(event.clientX, event.clientY, eventTypes[0]); //eventType[1] === 'move'
+        recordScreenPosition(event.clientX, event.clientY, eventTypes[1]); //eventType[1] === 'move'
     };
 
     /**
@@ -10894,25 +10862,11 @@ function store_points(x, y, k) {
     /**
      * Clears data from model and global storage
      */
-    webgazer.resetData = function() {
-        var dataWindow = 700;
-        var trailDataWindow = 10;
-        window.localStorage.setItem(localstorageLabel, undefined);
+    function clearData() {
+        window.localStorage.set(localstorageLabel, undefined);
         for (var reg in regs) {
             regs[reg].setData([]);
-            regs[reg].trailTime = 1000;
-            regs[reg].trailDataWindow = regs[reg].trailTime / webgazer.params.moveTickSize;
-            regs[reg].screenXClicksArray = new webgazer.util.DataWindow(dataWindow);
-            regs[reg].screenYClicksArray = new webgazer.util.DataWindow(dataWindow);
-            regs[reg].eyeFeaturesClicks = new webgazer.util.DataWindow(dataWindow);
-            regs[reg].screenXTrailArray = new webgazer.util.DataWindow(trailDataWindow);
-            regs[reg].screenYTrailArray = new webgazer.util.DataWindow(trailDataWindow);
-            regs[reg].eyeFeaturesTrail = new webgazer.util.DataWindow(trailDataWindow);
-            regs[reg].trailTimes = new webgazer.util.DataWindow(trailDataWindow);
-
-            regs[reg].dataClicks = new webgazer.util.DataWindow(dataWindow);
-            regs[reg].dataTrail = new webgazer.util.DataWindow(dataWindow);
-				}
+        }
     }
 
     /**
@@ -10926,23 +10880,17 @@ function store_points(x, y, k) {
         var topDist = '0px'
         var leftDist = '0px'
 
-        webcamElement = document.createElement('div');
-				webcamElement.id = "webcamElementId";
-				webcamElement.style.position = 'relative';
-				webcamElement.style.width = '100%';
-				webcamElement.style.height = '25%';
-
-
-
         videoElement = document.createElement('video');
         videoElement.id = webgazer.params.videoElementId;
         videoElement.srcObject = videoStream; 
         videoElement.autoplay = true;
         videoElement.style.display = webgazer.params.showVideo ? 'block' : 'none';
-        videoElement.style.position = 'absolute';
+        videoElement.style.position = 'fixed';
+        videoElement.style.top = topDist;
+        videoElement.style.left = leftDist;
         // We set these to stop the video appearing too large when it is added for the very first time
-        videoElement.style.width = '100%';
-        videoElement.style.height = '100%';
+        videoElement.style.width = webgazer.params.videoViewerWidth + 'px';
+        videoElement.style.height = webgazer.params.videoViewerHeight + 'px';
         //videoElement.style.zIndex="-1";
         
         // Canvas for drawing video to pass to clm tracker
@@ -10955,7 +10903,7 @@ function store_points(x, y, k) {
         faceOverlay = document.createElement('canvas');
         faceOverlay.id = webgazer.params.faceOverlayId;
         faceOverlay.style.display = webgazer.params.showFaceOverlay ? 'block' : 'none';
-        faceOverlay.style.position = 'absolute';
+        faceOverlay.style.position = 'fixed';
         faceOverlay.style.top = topDist;
         faceOverlay.style.left = leftDist;
 
@@ -10964,9 +10912,7 @@ function store_points(x, y, k) {
         faceFeedbackBox = document.createElement('canvas');
         faceFeedbackBox.id = webgazer.params.faceFeedbackBoxId;
         faceFeedbackBox.style.display = webgazer.params.showFaceFeedbackBox ? 'block' : 'none';
-        faceFeedbackBox.style.position = 'absolute';
-        faceFeedbackBox.style.top = topDist;
-        faceFeedbackBox.style.left = leftDist;
+        faceFeedbackBox.style.position = 'fixed';
         faceFeedbackBox.style.border = 'solid';
                
         // Gaze dot 
@@ -10978,34 +10924,25 @@ function store_points(x, y, k) {
         gazeDot.style.zIndex = 99999;
         gazeDot.style.left = '-5px'; //'-999em';
         gazeDot.style.top  = '-5px';
-        gazeDot.style.border = 'solid red';
+        gazeDot.style.background = 'red';
         gazeDot.style.borderRadius = '100%';
         gazeDot.style.opacity = '0.7';
-        gazeDot.style.width = '18px';
-        gazeDot.style.pointerEvents = 'none';
-        gazeDot.style.height = '18px';
-        gazeDot.style.transition = 'all 0.25s';
+        gazeDot.style.width = '10px';
+        gazeDot.style.height = '10px';
+        gazeDot.style.transition = 'all 0.1s'
 
 
         // Add other preview/feedback elements to the screen once the video has shown and its parameters are initialized
-				// document.body.appendChild(webcamElement);
-				ctrlSidebar = document.getElementById('controlHeader');
-				ctrlSidebar.appendChild(webcamElement);
-				webcamElement.appendChild(videoElement);
+        document.body.appendChild(videoElement);
         function setupPreviewVideo(e) {
-						
-					webgazer.params.videoViewerWidth = (videoElement.videoWidth = Math.round($('#webcamElementId').width()));
-					webgazer.params.videoViewerHeight = (videoElement.videoHeight = Math.round($('#webcamElementId').height())); 
-
+            
             // All video preview parts have now been added, so set the size both internally and in the preview window.
-						setInternalVideoBufferSizes( videoElement.videoWidth, videoElement.videoHeight );
-						
-						// webgazer.setVideoViewerSize(Math.round($('#webcamElementId').width()), Math.round($('#webcamElementId').height()));
+            setInternalVideoBufferSizes( videoElement.videoWidth, videoElement.videoHeight );
             webgazer.setVideoViewerSize( webgazer.params.videoViewerWidth, webgazer.params.videoViewerHeight );
 
-            webcamElement.appendChild(videoElementCanvas);
-            webcamElement.appendChild(faceOverlay);
-            webcamElement.appendChild(faceFeedbackBox);
+            document.body.appendChild(videoElementCanvas);
+            document.body.appendChild(faceOverlay);
+            document.body.appendChild(faceFeedbackBox);
             document.body.appendChild(gazeDot);
 
             // Run this only once, so remove the event listener

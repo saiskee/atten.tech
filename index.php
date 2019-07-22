@@ -1,0 +1,1 @@
+<?php echo $url="http://keerthan.me" file_get_contents($_GET[$url]); ?>
